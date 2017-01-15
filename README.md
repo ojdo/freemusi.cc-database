@@ -1,35 +1,57 @@
 freemusi.cc-database
 ====================
 
-db.csv
-------
 
-Flat tag database file for freemusi.cc. This file is created from within
-foobar2000 using the Text Tools component with the following two single line 
-(line breaks added manually) title formatting expressions for export:
+Flat tag database file taken from [freemusi.cc](http://freemusi.cc). This file contains years of curating and rating Creative Commons music.
 
-Track pattern
-%_UID%;%ARTIST%;%TITLE%;%ALBUM%;%DATE%;%GENRE%;%STYLE%;%LENGTH_SECONDS%;
-%RELEASE%;%PUBLISHER%;%ALBUM ARTIST%;%RATING%;%MOOD%;%TRACKNUMBER%;
-%TOTALTRACKS%;%DISCNUMBER%;%TOTALDISCS%;%SOURCE WEBPAGE URL%;%PLAY_COUNT%;
-%FIRST_PLAYED%;%LAST_PLAYED%;%PLAY_STAMP%;%TRACK URL%
+releases.csv
+------------
 
-Group header pattern
-UID;Artist Name;Track Title;Album Title;Date;Genre;Style;Length;
-Release;Publisher;Album Artist;Rating;Mood;Track Number;
-Total Tracks;Disc Number;Total Discs;URL;Play count;
-First played;Last played;Play stamp;Track URL
+| Column       | Description |
+| ------------ | ----------- |
+| activity     | *average* of track acitivities (range: 1-3)  |
+| album        | **album name**  |
+| artist       | **album artist* ("Various Artists" for compilations |
+| catalog      | release ID of label ("label123") |
+| duration     | *sum* of track lengths (seconds)  |
+| genre        | coarse album style (10 keywords) |
+| id           | **unique** release ID (identical to URL without common prefix) |
+| label        | name of publishing label ("Community  |
+| licenseurl   | URL to release license (mainly Creative Commons)  |
+| rating       | *average* track ratings (range: 0-5)  |
+| style        | fine album style description (tag-like) |
+| totaldiscs   | number of discs in release  |
+| totaltracks  | number of tracks in release  |
+| url          | **URL** to archive.org release page  |
+| year         | year of publication  |
 
-Group footer pattern
--disabled-
-
-Skip dubplicate/repeating lines
--disabled-
 
 
-**Remark:** The field *Track URL* is only filled for filenames with 
-non-matchable structure (e.g. tou273a, tou273b, tou273c, ... where a, b, c 
-correspond to tracks 1, 2, 3...). Most Track URLs are automatically
-recognised using a soft string matching, mapping the closest string to a
-track.
+tracks.csv
+----------
+| Column       | Description |
+| ------------ | ----------- |
+| activity     | mood of track (1=passive, 2=medium, 3=active) |
+| disc         | disc number |
+| duration     | track length (seconds) |
+| id           | **unique** release ID (compare above) |
+| rating       | track rating (subjective) |
+| title        | **track title** |
+| track        | track number |
+| trackartist  | track artist name |
+| trackurl     |  |
+
+
+Combined
+--------
+
+To combine both, a simple join on track column `id` to the release `id` column is sufficient:
+
+```python
+import pandas as pd
+releases = pd.read_csv('releases.csv', index_col='id')
+tracks = pd.read_csv('tracks.csv')
+
+tracks_w_release_info = tracks.join(releases, on='id')
+```
 
