@@ -11,7 +11,7 @@ releases.csv
 | ------------ | ----------- |
 | activity     | *average* of track acitivities (range: 1-3)  |
 | album        | **album name**  |
-| artist       | **album artist* ("Various Artists" for compilations |
+| artist       | **album artist** ("Various Artists" for compilations) |
 | catalog      | release ID of label ("label123") |
 | duration     | *sum* of track lengths (seconds)  |
 | genre        | coarse album style (10 keywords) |
@@ -39,7 +39,7 @@ tracks.csv
 | title        | **track title** |
 | track        | track number |
 | trackartist  | track artist name |
-| trackurl     |  |
+| trackurl     | direct URL to music file |
 
 
 Combined
